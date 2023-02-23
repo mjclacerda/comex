@@ -1,9 +1,4 @@
 <x-layout title="Nova Categoria">
-    <form action="" method="POST">
-        <div class="mb-3">
-            <label for="nome" class="form-label">Nome da Categoria</label>
-            <input type="text" id="nome" name="nome" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-primary">Criar</button>
-    </form>
+    @if($errors->any())<x-erros/>@endif
+    <x-form action="{{ route ('categorias.store')}}" bname="Criar" :nome="old('nome')"/>
 </x-layout>

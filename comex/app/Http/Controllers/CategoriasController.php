@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoriasFormRequest;
 use Illuminate\Http\Request;
+use App\Models\Categoria;
 
 class CategoriasController extends Controller
 {
@@ -13,8 +15,10 @@ class CategoriasController extends Controller
      */
     public function index(Request $request)
     {
-        $categorias = ["Celulares","Informática", "Móveis", "Automotiva", "Livros", "Beleza", "Esporte", "Luxo"];
-        return view(view:'categorias.index')->with('categorias',$categorias);
+        $categorias = Categoria::query()->orderBy('nome')->get();
+        $mensagemSucesso = $request->session()->get('mensagem.sucesso');
+        $request->session()->forget('mensagem.sucesso');
+        return view(view:'categorias.index')->with('categorias',$categorias)->with('mensagemSucesso',$mensagemSucesso);
     }
 
     /**
@@ -33,9 +37,10 @@ class CategoriasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoriasFormRequest $request)
     {
-        //
+       $categoria = Categoria::create($request->all());
+        return to_route('categorias.index')->with('mensagem.sucesso', "Categoria {$categoria->nome} criada com sucesso!");
     }
 
     /**
@@ -55,9 +60,9 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Categoria $categoria)
     {
-        //
+        return view('categorias.edit')->with('categoria',$categoria);
     }
 
     /**
@@ -67,9 +72,11 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(Categoria $categoria, CategoriasFormRequest $request)
+    {   
+        $categoria->fill($request->all());
+        $categoria->save();
+        return to_route('categorias.index')->with('mensagem.sucesso', "Categoria '{$categoria->nome}' atualizada com sucesso");
     }
 
     /**
@@ -78,8 +85,11 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        Categoria::destroy($id);
+        $request->session()->put('mensagem.sucesso', 'Categoria removida com sucesso!');
+
+        return to_route('categorias.index');
     }
 }
