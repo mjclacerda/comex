@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CategoriasFormRequest;
 use Illuminate\Http\Request;
+use App\Models\Produto;
 use App\Models\Categoria;
+use App\Http\Requests\ProdutosFormRequest;
 
-class CategoriasController extends Controller
+class ProdutosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,11 @@ class CategoriasController extends Controller
      */
     public function index(Request $request)
     {
-        $categorias = Categoria::all();
+        $produtos = Produto::all();
         $mensagemSucesso = $request->session()->get('mensagem.sucesso');
         $request->session()->forget('mensagem.sucesso');
-        return view(view:'categorias.index')->with('categorias',$categorias)->with('mensagemSucesso',$mensagemSucesso);
+        return view(view:'produtos.index')->with('produtos',$produtos)->with('mensagemSucesso',$mensagemSucesso);
+    
     }
 
     /**
@@ -27,8 +29,9 @@ class CategoriasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('categorias.create');
+    { 
+        $categorias = Categoria::all();
+        return view('produtos.create')->with('categorias', $categorias);
     }
 
     /**
@@ -37,10 +40,10 @@ class CategoriasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoriasFormRequest $request)
+    public function store(ProdutosFormRequest $request)
     {
-       $categoria = Categoria::create($request->all());
-        return to_route('categorias.index')->with('mensagem.sucesso', "Categoria {$categoria->nome} criada com sucesso!");
+        $produto = Produto::create($request->all());
+        return to_route('produtos.index')->with('mensagem.sucesso', "Produto {$produto->nome} criado com sucesso!");
     }
 
     /**
@@ -60,9 +63,10 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Categoria $categoria)
+    public function edit(Produto $produto)
     {
-        return view('categorias.edit')->with('categoria',$categoria);
+        $categorias = Categoria::all();
+        return view('produtos.edit')->with('produto', $produto)->with('categorias', $categorias);
     }
 
     /**
@@ -72,11 +76,11 @@ class CategoriasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Categoria $categoria, CategoriasFormRequest $request)
-    {   
-        $categoria->fill($request->all());
-        $categoria->save();
-        return to_route('categorias.index')->with('mensagem.sucesso', "Categoria '{$categoria->nome}' atualizada com sucesso");
+    public function update(Produto $produto, ProdutosFormRequest $request){
+        
+        $produto->fill($request->all());
+        $produto->save();
+        return to_route('produtos.index')->with('mensagem.sucesso', "Produto '{$produto->nome}' atualizado com sucesso");
     }
 
     /**
@@ -87,9 +91,9 @@ class CategoriasController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        Categoria::destroy($id);
-        $request->session()->put('mensagem.sucesso', 'Categoria removida com sucesso!');
+        Produto::destroy($id);
+        $request->session()->put('mensagem.sucesso', 'Produto removido com sucesso!');
 
-        return to_route('categorias.index');
+        return to_route('produtos.index');
     }
 }
