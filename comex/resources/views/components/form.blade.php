@@ -1,6 +1,5 @@
 <form action="{{$action}}" method="post">
         @csrf
-
         @isset($met)
         @method('PUT')
         @endisset
