@@ -1,4 +1,6 @@
 <x-layout title="Edição de Clientes {{ $cliente->nome }}">
+    <div class="container">
+        <h1>Clientes</h1>
     @if($errors->any())<x-erros/>@endif
     <x-formclient action="{{ route ('clientes.update', $cliente->id) }}"
         nome="{!! $cliente->nome !!}"
@@ -12,4 +14,5 @@
         estado="{!! $cliente->endereco->estado !!}"
         bname="Alterar"
         met="PUT"/>
+    </div>
 </x-layout>

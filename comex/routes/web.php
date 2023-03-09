@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ProdutosController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,4 +28,7 @@ Route::resource('produtos', ProdutosController::class)
 ->except(['show']);
 
 Route::resource('clientes', ClientesController::class)
+->except(['show']);
+
+Route::resource('login', LoginController::class)
 ->except(['show']);

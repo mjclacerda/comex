@@ -1,4 +1,6 @@
 <x-layout title="Clientes">
+    <div class="container">
+        <h1>Clientes</h1>
     @if($errors->any())<x-erros/>@endif
     <a href="" class="btn btn-info mb-2">Pesquisar</a>
     <a href="{{ route('clientes.create') }}" class="btn btn-info mb-2">Cadastrar</a>
@@ -21,6 +23,7 @@
             </li> 
         @endforeach
     </ul>
+    </div>
 </x-layout>
 
 
